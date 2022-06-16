@@ -1,0 +1,33 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 06-09-2022
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<aura:component>
+    <aura:handler event="c:patientLoaded" action="{!c.onPatientloaded}" />
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="patients" type="Patient__c[]"/>
+
+    <lightning:card title="Patient Records" iconName="standard:customers">
+        <div class="slds-p-left_medium slds-p-right_medium">
+            <ul class="slds-list_vertical slds-has-dividers_top-space">
+                <aura:if isTrue="{!v.patients.length > 0}">
+                    <aura:iteration items="{!v.patients}" var="paitents">
+                        <li class="slds-list_item">
+                            <c:patientRecordListItems patient="{!paitents}"/>
+                            <!-- <h3 class="slds-text-body_small slds-text-color_error">Patients Record find</h3> -->
+                        </li>
+                    </aura:iteration>
+                <aura:set attribute="else">
+                    <li class="slds-list_item">
+                        <h3 class="slds-text-body_small slds-text-color_error">No Patient Records Found</h3>
+                    </li>
+                </aura:set>
+                </aura:if>
+            </ul>
+        </div>
+
+    </lightning:card>
+</aura:component>	

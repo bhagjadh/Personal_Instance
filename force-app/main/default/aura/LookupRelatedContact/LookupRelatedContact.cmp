@@ -1,0 +1,19 @@
+<aura:component controller="LookupRelatedContactC"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    
+    <aura:handler name="change" value="{!v.selectedLookUpRecord}" action="{!c.selectedLookupChanged}"/> 
+    <c:LookupReusable_Parent objectAPIName="account" IconName="standard:account" 
+                             selectedRecord="{!v.selectedLookUpRecord}" 
+                             label="Accounts"/>
+        
+    <br/><br/>
+    
+    <lightning:datatable columns="{! v.columns }"
+                         data="{! v.data }"
+                         keyField="id"
+                         hideCheckboxColumn="true"/>
+</aura:component>

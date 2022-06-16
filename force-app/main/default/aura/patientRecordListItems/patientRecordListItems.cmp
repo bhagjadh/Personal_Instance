@@ -1,0 +1,156 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 06-10-2022
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<aura:component controller="patientCareServiceController" implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+
+    <lightning:navigation aura:id="navLink"/>
+
+    <aura:attribute name="patient" type="Patient__c"/>
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="patientServices" type="Patient_Care_Service__c[]"/>
+    <aura:attribute name="showPatientCareServices" type="boolean" default="false"/>
+    <aura:attribute name="patintServcieColumns" type="List" />
+
+
+        <aura:if isTrue="{! not( empty( v.patient.Id ) ) }">
+
+            <lightning:recordViewForm aura:id="viewForm" recordId="{!v.patient.Id}" objectApiName="Patient__c">
+
+                <div class="slds-p-horizontal_small slds-m-around_x-small">
+
+                    <div class="header slds-page-header">
+
+                            <h3 class="slds-text-heading_small slds-m-bottom_xx-small">{!v.patient.Name}</h3>
+
+                    </div>
+
+                    <div class="slds-box slds-theme_default slds-container_x-large slds-form-element_horizontal">
+
+                        <div class="slds-media">
+
+                            <div class="slds-media__figure">
+
+                                <lightning:icon iconName="standard:avatar" class="slds-avatar_medium slds-avatar_circle" />
+
+                            </div>
+                            
+                            <div class="slds-media__body">
+
+                                <lightning:layout class="slds-hint-parent">
+
+                                    <a onclick="{!c.navToRecord}">
+
+                                        <h3 class="slds-text-heading_small slds-m-bottom_xx-small">{!v.patient.Medical_Record__c}</h3>
+
+                                    </a>
+
+                                </lightning:layout>   
+
+                                <lightning:layout multipleRows="true">
+
+                                    <lightning:layoutItem size="6">
+
+                                        <lightning:outputField fieldName="Patient_First_Name__c" />
+
+                                    </lightning:layoutItem>
+
+                                    <lightning:layoutItem size="6">
+
+                                        <lightning:outputField fieldName="Patient_Middle_Name__c" />
+
+                                    </lightning:layoutItem>
+
+                                    <lightning:layoutItem size="6">
+
+                                        <lightning:outputField fieldName="Patient_Last_Name__c" />
+
+                                    </lightning:layoutItem>
+
+                                    <lightning:layoutItem size="6">
+
+                                        <lightning:outputField fieldName="Patient_Date_of_Birth__c" />
+
+                                    </lightning:layoutItem>
+
+                                    <lightning:layoutItem size="6">
+
+                                        <lightning:outputField fieldName="Patient_Email__c" />
+
+                                    </lightning:layoutItem>
+
+                                    <lightning:layoutItem size="6">
+
+                                        <lightning:outputField fieldName="Patient_Contact_Phone__c" />
+
+                                    </lightning:layoutItem>
+
+                                    <lightning:layoutItem size="6">
+
+                                        <lightning:outputField fieldName="Gender__c" />
+
+                                    </lightning:layoutItem>
+
+                                    <lightning:layoutItem size="6">
+
+                                        <lightning:outputField fieldName="Marrital_Status__c" />
+
+                                    </lightning:layoutItem>
+
+                                </lightning:layout>
+
+                            </div>
+                            
+                            <!-- <div class="header slds-page-header">
+
+                                <h3 class="slds-text-heading_small slds-m-bottom_xx-small">View Patient Care Services</h3>
+    
+                            </div> -->
+
+                            <!-- <div class="slds-form-element buttons slds-text-align_center"> -->
+                            <div class="slds-col_bump-left">
+                                <aura:if isTrue="{!v.showPatientCareServices}">
+                                    <lightning:button label="Hide Patient Services" value="{!v.patient.Id}" variant="brand"
+                                                      onclick="{!c.hidePatientCareServices}"/>
+                                    <aura:set attribute="else">
+                                        <lightning:button label="Show Patient Services" value="{!v.patient.Id}" variant="brand"
+                                                          onclick="{!c.displayPatientCareServices}"/>
+                                    </aura:set>
+                                </aura:if>
+                                
+                            </div>
+
+                        </div>
+
+                        <div class="slds-p-top_medium">
+                            <aura:if isTrue="{!v.showPatientCareServices}">
+                                <aura:if isTrue="{!v.patientServices.length > 0}">
+                                    <lightning:datatable
+                                        keyField="id"
+                                        data="{! v.patientServices}"
+                                        columns="{! v.patintServcieColumns}"
+                                        hideCheckboxColumn="true"/>
+
+                                    <aura:set attribute="else">
+                                        <div class="slds-align_absolute-center">
+                                            <li class="slds-list_item">
+                                                <h3 class="slds-text-body_small slds-text-color_error">No Patient Care Service Records Found</h3>
+                                            </li>
+                                        </div>
+                                    </aura:set>
+                                </aura:if>
+                            </aura:if>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </lightning:recordViewForm>
+
+        </aura:if>
+
+</aura:component>

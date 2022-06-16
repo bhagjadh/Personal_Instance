@@ -1,0 +1,257 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 06-16-2022
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<aura:component controller="patientCareServiceController" implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+	<aura:attribute name="patientInfo" type="Patient__c" default="{'SobjectType': 'Patient__c'}"/>
+    <aura:attribute name="patientsWrapInfo" type="patientCareServiceController.patientWrapperClass" />
+    <aura:attribute name="picklistMap" type="Map" default="{}" />
+    <aura:attribute name="optionsGender" type="List" default="[]" />
+    <aura:attribute name="optionsMarrital_Status" type="List" default="[]" />
+    <aura:attribute name="optionsSpecialty" type="List" default="[]" /> 
+    <aura:attribute name="optionsSupportive_Care" type="List" default="[]" />
+    <aura:attribute name="optionsPreferred_day_of_the_week" type="List" default="[]" />
+    <aura:attribute name="optionsService" type="List" default="[]" />
+
+    <aura:attribute name="checkboxRequired" type="Boolean" default="true" />
+    <aura:attribute name="patientTherapyServiceInfo" type="Patient_Care_Service__c" default="{'SobjectType': 'Patient_Care_Service__c'}" />
+    <aura:attribute name="patientNursingServiceInfo" type="Patient_Care_Service__c" default="{'SobjectType': 'Patient_Care_Service__c'}" />
+    
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>    
+ 
+    <lightning:tabset selectedTabId="one">
+        <lightning:tab label="Patient Form" id="one">
+            <lightning:card title="Patient Information" iconName="standard:avatar">
+                <div class="slds-box slds-theme_default slds-container_x-large slds=p-horizontal_small slds-m-arounf_x-small slds-form_stacked">
+                    <lightning:layout horizontalAlign="space" multipleRows="true">
+                        <lightning:layoutItem size="12">
+                            <lightning:input type="text" 
+                                             aura:id="medicalRecord"
+                                             label="{!$Label.c.Patient_Medical_Record}"
+                                             placeholder="{!$Label.c.Patient_Medical_Record_Placeholder}"
+                                             name="MedicalRecordNumber"
+                                             value="{!v.patientInfo.Medical_Record__c}"
+                                             maxlength="{!$Label.c.Patient_MRN_Maxlength}"
+                                             messageWhenPatternMismatch="{!$Label.c.Patient_MRN_Pattern_Mismatch}"
+                                             pattern="{!$Label.c.Patient_MRN_Pattern}"
+                                             required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" mediumDeviceSize="6">
+                            <lightning:input aura:id="patientFirstName"
+                                            name="patientname"
+                                            label="{!$Label.c.Patient_First_Name}"
+                                            placeholder="{!$Label.c.Patient_first_Name_Placeholder}"
+                                            value="{!v.patientInfo.Patient_First_Name__c}"
+                                            required="true"
+                                            />
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" mediumDeviceSize="6">
+                            <lightning:input type="text" aura:id="patientMiddleName"
+                                            name="patientmiddlename"
+                                            label="{!$Label.c.Patient_Middle_Name}"
+                                            placeholder="{!$Label.c.Patient_Middle_Name_Placeholder}"
+                                            value="{!v.patientInfo.Patient_Middle_Name__c}"
+                                            required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" mediumDeviceSize="6">
+                            <lightning:input aura:id="patientLastName"
+                                            name="patientlastname"
+                                            label="{!$Label.c.Patient_Last_Name}"
+                                            placeholder="{!$Label.c.Pattern_Last_Name_Placeholder}"
+                                            value="{!v.patientInfo.Patient_Last_Name__c}"
+                                            required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" mediumDeviceSize="6">
+                            <lightning:input aura:id="patientDOB" type="date" 
+                                            name="dob"
+                                            label="{!$Label.c.Patient_DOB}"
+                                            placeholder="{!$Label.c.Patient_DOB_Placeholder}"
+                                            value="{!v.patientInfo.Patient_Date_of_Birth__c}"
+                                            required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" mediumDeviceSize="6">
+                            <lightning:input type="email" aura:id="patientEmail"
+                                            name="patientemail"
+                                            label="{!$Label.c.Patient_Email}"
+                                            placeholder="{!$Label.c.Patient_Email_Placeholder}"
+                                            value="{!v.patientInfo.Patient_Email__c}"
+                                            required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" mediumDeviceSize="6">
+                            <lightning:input type="phone" aura:id="patientContact"
+                                            name="patientcontactphone"
+                                            label="{!$Label.c.Patient_Contact_Phone}"
+                                            placeholder="{!$Label.c.Patient_Contact_Phone_Placeholder}"
+                                            pattern="{!$Label.c.Patient_Contact_Phone_Pattern}"
+                                            maxlength="{!$Label.c.Patient_Contact_Phone_Maxlength}"
+                                            minlength="{!$Label.c.Patient_Contact_Phone_Minlength	}"
+                                            messageWhenPatternMismatch="{!$Label.c.Patient_Contact_Phone_Mismatch}"
+                                            value="{!v.patientInfo.Patient_Contact_Phone__c}"
+                                            required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" mediumDeviceSize="6">
+                            <lightning:combobox aura:id="Gender"
+                                                placeholder="Select an Option" 
+                                                name="gender" 
+                                                label="{!$Label.c.Patient_Gender}"
+                                                options="{!v.optionsGender}" 
+                                                value="{!v.patientInfo.Gender__c}"
+                                                onchange="{!c.handleValueChange}"
+                                                required="true"/>                            
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" mediumDeviceSize="6">
+                            <lightning:combobox aura:id="Marrital_Status"
+                                                placeholder="Select an Option" 
+                                                name="marrital_Status" 
+                                                label="{!$Label.c.Patient_Marital_Status}"
+                                                options="{!v.optionsMarrital_Status}" 
+                                                value="{!v.patientInfo.Marrital_Status__c}"
+                                                onchange="{!c.handleValueChange}"
+                                                required="true"/>  
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    
+
+                    <div class="page-section page-header">
+                        <h2 class="slds-text-heading_label">Patient Care Services</h2>
+                    </div>
+                    <br/>
+
+                   <lightning:layout>
+                        <lightning:layoutItem size="12" mediumDeviceSize="6">
+                            <lightning:input type="checkbox" 
+                                             aura:id="patientTherapy" 
+                                             label="{!$Label.c.Patient_Therapy_Services}"
+                                             name="therapyServices"
+                                             checked="{!v.patientTherapyServiceInfo.Therapy_Service__c}"
+                                             />
+                        </lightning:layoutItem>
+
+                        <aura:if isTrue="{!v.patientTherapyServiceInfo.Therapy_Service__c}">
+                            <lightning:layoutItem size="12" mediumDeviceSize="6">
+                                <lightning:layout multipleRows="true">
+                                    <lightning:layoutItem size="12">
+                                        <lightning:combobox aura:id="Specialty"
+                                                            placeholder="Select an Option" 
+                                                            name="specialty" 
+                                                            label="{!$Label.c.Patient_Specialty}"
+                                                            options="{!v.optionsSpecialty}" 
+                                                            value="{!v.patientTherapyServiceInfo.Specialty__c}"
+                                                            onchange="{!c.handleValueChange}"
+                                                            required="true"/> 
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem size="12" mediumDeviceSize="6">
+                                        <lightning:combobox aura:id="Preferred_day_of_the_week"
+                                                            placeholder="Select an Option" 
+                                                            name="PrefDayOfTheWeek" 
+                                                            label="{!$Label.c.Patient_Preferred_Day_of_week}"
+                                                            options="{!v.optionsPreferred_day_of_the_week}" 
+                                                            value="{!v.patientTherapyServiceInfo.Preferred_day_of_the_week__c}"
+                                                            onchange="{!c.handleValueChange}"
+                                                            required="true"/> 
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem size="12" mediumDeviceSize="6">
+                                        <lightning:input aura:id="patientPrefTimeOfWeek"
+                                                            type="time"
+                                                            placeholder="Select an Option" 
+                                                            name="Preferred time of day" 
+                                                            label="{!$Label.c.Patient_Preferred_time_of_day}"
+                                                            value="{!v.patientTherapyServiceInfo.Preferred_time_of_day__c}"
+                                                            required="true"/> 
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem size="12" mediumDeviceSize="6">
+                                        <lightning:input type="text" aura:id="patientMessgae" 
+                                                         label="{!$Label.c.Patient_Message}"
+                                                         placeholder="{!$Label.c.Patient_Message_Placeholder}"
+                                                         name="patientmiddlename"
+                                                         value="{!v.patientTherapyServiceInfo.Patient_Message__c}"
+                                                         />
+                                    </lightning:layoutItem>
+                                </lightning:layout>
+                            </lightning:layoutItem> 
+                        </aura:if>
+                    </lightning:layout>
+                  
+                    <lightning:layout>
+                        <lightning:layoutItem size="12" mediumDeviceSize="6">
+                            <lightning:input type="checkbox" 
+                                             aura:id="patientNursing" 
+                                             label="{!$Label.c.Patient_Nursing_Services}"
+                                             name="nursingServices"
+                                             checked="{!v.patientNursingServiceInfo.Nursing_Service__c}"
+                                            />
+                        </lightning:layoutItem>
+                        <aura:if isTrue="{!v.patientNursingServiceInfo.Nursing_Service__c}">
+                            <lightning:layoutItem size="12" mediumDeviceSize="6">
+                                <lightning:layout multipleRows="true">
+                                    <lightning:layoutItem size="12">
+                                        <lightning:combobox aura:id="Supportive_Care"
+                                                            placeholder="Select an Option" 
+                                                            name="Supportive_Care" 
+                                                            label="{!$Label.c.Patient_Supportive_Care}" 
+                                                            options="{!v.optionsSupportive_Care}" 
+                                                            value="{!v.patientNursingServiceInfo.Supportive_Care__c}"
+                                                            onchange="{!c.handleValueChange}"
+                                                            required="true"/> 
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem size="12">
+                                        <lightning:combobox aura:id="Service"
+                                                            placeholder="Select an Option" 
+                                                            name="Service" 
+                                                            label="{!$Label.c.Patient_Service}"
+                                                            options="{!v.optionsService}" 
+                                                            value="{!v.patientNursingServiceInfo.Service__c}"
+                                                            onchange="{!c.handleValueChange}"
+                                                            required="true"/> 
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem size="12">
+                                        <lightning:combobox aura:id="Nurse_Preferred_day_of_the_week"
+                                                            placeholder="Select an Option" 
+                                                            name="NursePrefDayOfTheWeek" 
+                                                            label="{!$Label.c.Patient_Preferred_Day_of_week}"
+                                                            options="{!v.optionsPreferred_day_of_the_week}" 
+                                                            value="{!v.patientNursingServiceInfo.Preferred_day_of_the_week__c}"
+                                                            onchange="{!c.handleValueChange}"
+                                                            required="true"/> 
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem size="12">
+                                        <lightning:input aura:id="NursepatientPrefTimeOfWeek"
+                                                        placeholder="Select an Option"
+                                                        type="time" 
+                                                        name="Preferred time of day" 
+                                                        label="{!$Label.c.Patient_Preferred_time_of_day}" 
+                                                        value="{!v.patientNursingServiceInfo.Preferred_time_of_day__c}"
+                                                        required="true"/> 
+                                    </lightning:layoutItem>
+                                </lightning:layout>
+                            </lightning:layoutItem>
+                        </aura:if>
+                    </lightning:layout>
+                    <div class="slds-form-element buttons slds-text-align_center">
+                        <lightning:button label="Create Patient"
+                                            class="slds-m-top_medium"
+                                            variant="brand"
+                                            onclick="{!c.clickCreate}"/>
+                    </div>
+                </div>
+            </lightning:card>
+        </lightning:tab>
+
+        <lightning:tab label="Patient View Form" id="two">
+            <lightning:layout horizontalAlign="space" multipleRows="true">
+                <lightning:layoutItem size="12"
+                                    mediumDeviceSize="12"
+                                    padding="around-small">
+                  <c:patientLocator />
+                   <!--<c:patientSearchBar/>-->
+                  <!-- <c:tempComp/>-->
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:tab>
+    </lightning:tabset>
+</aura:component>

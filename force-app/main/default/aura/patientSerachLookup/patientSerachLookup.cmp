@@ -1,0 +1,28 @@
+<aura:component>
+    <aura:attribute name="patients" type="Patient__c" />
+    <!--Register the component level event-->
+      <aura:registerEvent name="selectedpatientsLoadedEvent" type="c:patientLoaded"/>
+      
+      <!-- <li role="presentation">
+          <span class="slds-lookup__item-action slds-media slds-mediacenter" id="lookup-option-350" role="option">
+           <div class="slds-media__body">
+            <div class="slds-input-has-icon slds-input-has-iconright">
+              <c:svg class="slds-input__icon" xlinkHref="{!$Resource.SLDS24 + '/assets/icons/standard-sprite/svg/symbols.svg#account'}" />
+              <div class="slds-lookup__result-text"><a onclick="{!c.selectPatient}">{!v.patients.Name}</a></div>
+            </div>
+          </div>    
+          </span>
+      </li> -->
+
+      <lightning:layout class="slds-hint-parent">
+          <a onclick="{!c.selectPatient}">
+              <h3 class="slds-text-heading_small slds-m-bottom_xx-small">{!v.patients.Name}</h3>
+          </a>
+      </lightning:layout>
+
+      <lightning:layout multipleRows="true">
+          <lightning:layoutItem size="6">
+              <lightning:outputField fieldName="Patient_First_Name__c" />
+          </lightning:layoutItem>
+      </lightning:layout>
+</aura:component>	

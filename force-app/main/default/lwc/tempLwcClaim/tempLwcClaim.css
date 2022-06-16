@@ -1,0 +1,17 @@
+li {
+    font-size: 14px;
+    margin-left: 10px;
+    list-style-type: disc
+ }
+ .getHelpNow_btn{
+    float:right;
+    font-size: 16px;
+    font-family: "Slate Pro Medium";
+    padding: 5px 30px;
+    color:white;
+    opacity: 1;
+    margin-right: 10px;
+    border:none;
+    border-radius: 5px;
+    background: transparent linear-gradient(180deg, #158FEF 0%, #0073CF 100%) 0% 0% no-repeat padding-box;
+  }

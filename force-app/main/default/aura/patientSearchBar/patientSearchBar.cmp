@@ -1,0 +1,47 @@
+<aura:component controller="patientCareServiceController" implements="flexipage:availableForAllPageTypes">
+   
+    <aura:attribute name="patientList" type="List"/>
+    <aura:attribute name="activeSections" type="List" />
+    <aura:attribute name="searchResult" type="List" description="use for store and display account list return from server"/>
+    <aura:attribute name="searchKeyword" type="String" description="use for store user search input"/>
+   
+     <!--<aura:registerEvent name="patientsLoaded" type="c:patientLoaded"/>-->
+
+
+   <!-- <aura:attribute name="searchTerm" type="String"/>
+    <aura:attribute name="searchTimeoutId" type="string" />-->
+    <lightning:card title="Patients Search" iconName="standard:search">
+        <div class="slds-scrollable_y">
+            <div class="slds-text-longform">
+                <!--<div class="slds-form slds-p-around_x-small">-->
+                <lightning:input
+                    type="search"
+                    aura:id="searchField"
+                    label="Search"
+                    variant="label-hidden"
+                    value="{!v.searchKeyword}"
+                    placeholder="Search by Medical Record#"
+                    onchange="{!c.onSearchTermChange}"/>
+
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                           <tr class="slds-text-title_caps">
+                                <td>
+                                    <th scope="col">Patient Records</th> 
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.patientList}" var="patient" indexVar="index">
+                                <tr>
+                                    <td>
+                                        <div class="slds-truncate" title="">{!patient.Name}</div>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    </lightning:card>
+</aura:component>
